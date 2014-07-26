@@ -1,7 +1,7 @@
 {
   "name": "rosemaryserver",
   "version": "0.0.0",
-  "main": "lib/rosemaryserver.js",
+  "main": "server.js",
   "description": "Server for ProjectRosemary",
   "homepage": "https://github.com/NateTheGreatt/rosemaryserver",
   "bugs": "https://github.com/NateTheGreatt/rosemaryserver/issues",
@@ -13,14 +13,6 @@
     "type": "git",
     "url": "https://github.com/NateTheGreatt/rosemaryserver"
   },
-  "license": "MIT",
-  "files": [
-    "lib"
-  ],
-  "keywords": [
-    "rosemaryserver",
-    ""
-  ],
   "dependencies": {
     "express": "*",
     "jade": "*",
@@ -45,8 +37,7 @@
     "grunt-concurrent": "~0.5.0"
   },
   "scripts": {
-    "test": "grunt",
-    "browser": "browserify lib/rosemaryserver.js > browser.js"
+    "test": "grunt"
   },
   "bin": {
     "rosemaryserver": "cli.js"

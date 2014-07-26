@@ -42,6 +42,11 @@ function onNewPlayer(data) {
     players.push(new Player(data.x, data.y, data.id));
 
     this.broadcast.emit("new player", { id: data.id, x: data.x, y: data.y });
+
+    for (var i = 0; i < players.length; i++) {
+        if (players[i].id != data.id)
+            this.emit("new player", { id: players[i].id, x: players[i].x, y: players[i].y });
+    }
 }
 ;
 

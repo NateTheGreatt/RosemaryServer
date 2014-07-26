@@ -48,10 +48,10 @@ function onNewPlayer(data) {
 
   this.broadcast.emit("new player", {id: data.id, x: data.x, y: data.y});
 
-  /*for(var i=0;i<players.length;i++) {
-  	if(players[i].id != this.id)
-  		this.emit("new player", {id: players[i].id, x: players[i].getX(), y: players[i].getY()});
-  }*/
+  for(var i=0;i<players.length;i++) {
+  	if(players[i].id != data.id)
+  		this.emit("new player", {id: players[i].id, x: players[i].x, y: players[i].y});
+  }
 };
 
 function onMovePlayer(data) {

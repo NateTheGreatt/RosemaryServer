@@ -32,30 +32,44 @@ function onSocketConnection(client) {
     client.on('moved', onMovePlayer);
 }
 
-function onClientDisconnect() {
-    console.log("Player disconnected: " + this.id);
-}
-;
-
 function onNewPlayer(data) {
     console.log('dat new new');
-    players.push(new Player(data.x, data.y, data.id));
+    players.push(new Player(data.x, data.y, data.id, data.name));
 
-    this.broadcast.emit("new player", { id: data.id, x: data.x, y: data.y });
+    this.broadcast.emit("new player", { id: data.id, x: data.x, y: data.y, name: data.name });
 
     for (var i = 0; i < players.length; i++) {
-        if (players[i].id != data.id)
-            this.emit("new player", { id: players[i].id, x: players[i].x, y: players[i].y });
+        if (players[i].id != data.id) {
+            console.log("I'm sending out");
+            this.emit("new player", { id: players[i].id, x: players[i].x, y: players[i].y, name: players[i].name });
+        }
     }
 }
 ;
 
 function onMovePlayer(data) {
-    console.log('player moved');
     var p = playerById(data.id);
     p.x = data.x;
     p.y = data.y;
-    this.broadcast.emit('player moved', { id: this.id, x: data.x, y: data.y });
+    p.name = data.name;
+    this.broadcast.emit('player moved', { id: this.id, x: data.x, y: data.y, name: data.name });
+}
+;
+
+function onClientDisconnect() {
+    console.log("Player has disconnected: " + this.id);
+
+    var removePlayer = playerById(this.id);
+
+    if (!removePlayer) {
+        console.log("Player not found: " + this.id);
+        return;
+    }
+    ;
+
+    players.splice(players.indexOf(removePlayer), 1);
+
+    this.broadcast.emit("remove player", { id: this.id });
 }
 ;
 
@@ -71,11 +85,12 @@ function playerById(id) {
 }
 
 var Player = (function () {
-    function Player(startX, startY, _id) {
-        console.log('new player created at (' + startX + ',' + startY + ') with ID: ' + _id);
+    function Player(startX, startY, _id, name) {
+        console.log('new player "' + name + '" created at (' + startX + ',' + startY + ') with ID: ' + _id);
         this.x = startX;
         this.y = startY;
         this.id = _id;
+        this.name = name;
     }
     Player.prototype.getX = function () {
         return this.x;
